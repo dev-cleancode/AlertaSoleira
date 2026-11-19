@@ -161,7 +161,6 @@ const Home = () => {
 
   return (
     <main>
-      {/* Hero */}
       <section
         id="inicio"
         className="relative scroll-mt-16 overflow-hidden bg-agua-900 text-white"
@@ -204,7 +203,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Introdução */}
       <section
         id="introducao"
         className="mx-auto max-w-6xl scroll-mt-16 px-4 py-12 md:py-16"
@@ -221,7 +219,6 @@ const Home = () => {
         </p>
       </section>
 
-      {/* Problema */}
       <section id="problema" className="scroll-mt-16 bg-slate-900 text-white">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-20">
           <p className="text-sm font-semibold uppercase text-red-400">
@@ -295,7 +292,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Solução */}
       <section
         id="solucao"
         className="mx-auto max-w-6xl scroll-mt-16 px-4 py-12 md:py-16"
@@ -332,8 +328,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Cálculos */}
-      <section id="calculos" className="scroll-mt-16 bg-white">
+      <section id="calculos" className="scroll-mt-16 bg-white ">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
           <h2 className="text-2xl font-bold text-agua-700 md:text-3xl">
             A matemática por trás do aviso
@@ -367,7 +362,7 @@ const Home = () => {
 
             {calculoAberto && (
               <div className="flex flex-col gap-8 border-t border-agua-100 p-4 text-slate-700 md:p-6">
-                {/* Resumo */}
+
                 <div className="border-l-4 border-yellow-500 bg-yellow-50 p-4 text-sm">
                   <p className="font-bold text-slate-900">Resumo</p>
                   <p className="mt-2">
@@ -381,7 +376,6 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* Chuva */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     1. A chuva
@@ -427,7 +421,6 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* Nível */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     2. O nível da água
@@ -449,7 +442,6 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* Limites */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     3. Limites
@@ -473,7 +465,6 @@ const Home = () => {
                   </ul>
                 </div>
 
-                {/* Derivadas */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     4. Derivadas
@@ -516,7 +507,6 @@ const Home = () => {
                   </ul>
                 </div>
 
-                {/* Integrais */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     5. Integrais
@@ -550,7 +540,6 @@ const Home = () => {
                   </ul>
                 </div>
 
-                {/* Alerta */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     6. Quando o alerta precisa sair
@@ -572,7 +561,6 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* Sensibilidade */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     7. E se o valor assumido for outro?
@@ -611,7 +599,6 @@ const Home = () => {
                   </p>
                 </div>
 
-                {/* Recomendações e limitações */}
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">
                     8. Recomendações e limitações
@@ -646,7 +633,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Registro de lojas */}
       <section
         id="registro"
         className="mx-auto max-w-6xl scroll-mt-16 px-4 py-12 md:py-16"
@@ -734,7 +720,6 @@ const Home = () => {
         </form>
       </section>
 
-      {/* Lojas e status */}
       <section id="lojas" className="scroll-mt-16 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
           <h2 className="text-2xl font-bold text-agua-700 md:text-3xl">
