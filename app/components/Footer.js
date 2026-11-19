@@ -1,3 +1,4 @@
+import Link from "next/link";
 import LoginForm from "./LoginForm";
 
 const MEMBROS = [
@@ -30,9 +31,16 @@ const Footer = () => {
             Área do comerciante
           </h2>
           <p className="mb-4 mt-1 text-sm text-slate-600">
-            Entre para atualizar o status da sua loja.
+            Entre para acessar a área da sua loja. Ainda não tem conta?{" "}
+            <Link
+              href="/#registro"
+              className="font-semibold text-agua-700 underline"
+            >
+              Registre sua loja
+            </Link>
+            .
           </p>
-          <LoginForm />
+          <LoginForm idBase="rodape" />
         </div>
       </div>
 

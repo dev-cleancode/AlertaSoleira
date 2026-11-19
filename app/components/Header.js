@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import LoginForm from "./LoginForm";
 
@@ -11,16 +12,17 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-10 border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="#inicio" className="text-lg font-bold text-agua-700">
+        <Link href="/#inicio" className="text-lg font-bold text-agua-700">
           AlertaSoleira
-        </a>
+        </Link>
 
         <nav className="hidden gap-6 text-sm font-medium text-slate-700 md:flex">
-          <a href="#introducao" className="hover:text-agua-600">Introdução</a>
-          <a href="#problema" className="hover:text-agua-600">Problema</a>
-          <a href="#solucao" className="hover:text-agua-600">Solução</a>
-          <a href="#registro" className="hover:text-agua-600">Registrar loja</a>
-          <a href="#lojas" className="hover:text-agua-600">Lojas</a>
+          <Link href="/#introducao" className="hover:text-agua-600">Introdução</Link>
+          <Link href="/#problema" className="hover:text-agua-600">Problema</Link>
+          <Link href="/#solucao" className="hover:text-agua-600">Solução</Link>
+          <Link href="/#calculos" className="hover:text-agua-600">Cálculos</Link>
+          <Link href="/#registro" className="hover:text-agua-600">Registrar loja</Link>
+          <Link href="/#lojas" className="hover:text-agua-600">Lojas</Link>
         </nav>
 
         <div className="relative">
@@ -34,7 +36,7 @@ const Header = () => {
 
           {aberto && (
             <div className="absolute right-0 mt-2 w-64 rounded-lg border border-slate-200 bg-white p-4 shadow-lg">
-              <LoginForm />
+              <LoginForm idBase="header" aoConcluir={() => setAberto(false)} />
             </div>
           )}
         </div>

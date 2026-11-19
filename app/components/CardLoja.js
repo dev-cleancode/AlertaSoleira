@@ -5,7 +5,13 @@ const STATUS = {
   SEM_LEITURAS: { texto: "SEM LEITURAS", cor: "bg-slate-500" },
 };
 
-const CardLoja = ({ loja, situacao, manual, logado, onMudarStatus }) => {
+const CardLoja = ({
+  loja,
+  situacao,
+  logado = false,
+  onMudarStatus,
+  onExcluir,
+}) => {
   const status = STATUS[situacao];
   const analise = loja.analise;
   const ultimoAviso = loja.avisos[loja.avisos.length - 1];
@@ -60,24 +66,34 @@ const CardLoja = ({ loja, situacao, manual, logado, onMudarStatus }) => {
       )}
 
       {logado && (
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor={`status-${loja.id}`}
-            className="text-xs font-medium text-slate-700"
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor={`status-${loja.id}`}
+              className="text-xs font-medium text-slate-700"
+            >
+              Status informado pela loja
+            </label>
+            <select
+              id={`status-${loja.id}`}
+              value={loja.statusManual || "AUTO"}
+              onChange={(e) => onMudarStatus(loja.id, e.target.value)}
+              className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+            >
+              <option value="AUTO">Automático (sensor)</option>
+              <option value="SEGURO">SEGURO</option>
+              <option value="ATENÇÃO">ATENÇÃO</option>
+              <option value="PERIGO">PERIGO</option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => onExcluir(loja)}
+            className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
           >
-            Status informado pela loja
-          </label>
-          <select
-            id={`status-${loja.id}`}
-            value={manual || "AUTO"}
-            onChange={(e) => onMudarStatus(loja.id, e.target.value)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
-          >
-            <option value="AUTO">Automático (sensor)</option>
-            <option value="SEGURO">SEGURO</option>
-            <option value="ATENÇÃO">ATENÇÃO</option>
-            <option value="PERIGO">PERIGO</option>
-          </select>
+            Excluir minha loja
+          </button>
         </div>
       )}
     </div>

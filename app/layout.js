@@ -11,7 +11,7 @@ export const metadata = {
 
 const RootLayout = ({ children }) => {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="scroll-smooth" data-scroll-behavior="smooth">
       <body className="bg-slate-50 text-slate-900">
         <AuthProvider>
           <Header />
