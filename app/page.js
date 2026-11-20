@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,6 @@ import {
 import CampoFormulario from "./components/CampoFormulario";
 import CardLoja from "./components/CardLoja";
 
-// Troque o alt e a legenda para combinar com as fotos que você escolher
 const FOTOS_ALAGAMENTO = [
   {
     src: "/imagens/alagamento-1.jpg",
@@ -70,6 +69,8 @@ const Home = () => {
   const [enviando, setEnviando] = useState(false);
   const [mensagemForm, setMensagemForm] = useState({ tipo: "", texto: "" });
   const [calculoAberto, setCalculoAberto] = useState(false);
+  const [alturaCalculo, setAlturaCalculo] = useState(0);
+  const caixaCalculoRef = useRef(null);
 
   useEffect(() => {
     const carregarLojas = async () => {
@@ -84,6 +85,27 @@ const Home = () => {
     };
     carregarLojas();
   }, []);
+
+  useEffect(() => {
+    if (!calculoAberto) return;
+
+    const atualizarAltura = () => {
+      setAlturaCalculo(caixaCalculoRef.current.scrollHeight);
+    };
+
+    window.addEventListener("resize", atualizarAltura);
+    return () => window.removeEventListener("resize", atualizarAltura);
+  }, [calculoAberto]);
+
+  const alternarCalculo = () => {
+    if (calculoAberto) {
+      setAlturaCalculo(0);
+      setCalculoAberto(false);
+    } else {
+      setAlturaCalculo(caixaCalculoRef.current.scrollHeight);
+      setCalculoAberto(true);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -306,19 +328,19 @@ const Home = () => {
           loja em três estados:
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          <div className="rounded-lg bg-green-600 p-4 text-white">
+          <div className="rounded-lg bg-green-600 p-4 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg">
             <h3 className="font-bold">SEGURO</h3>
             <p className="mt-2 text-sm">
               Nível baixo e estável. Nenhuma ação necessária.
             </p>
           </div>
-          <div className="rounded-lg bg-yellow-500 p-4 text-white">
+          <div className="rounded-lg bg-yellow-500 p-4 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg">
             <h3 className="font-bold">ATENÇÃO</h3>
             <p className="mt-2 text-sm">
               O nível passou de 60% da soleira. Hora de se preparar.
             </p>
           </div>
-          <div className="rounded-lg bg-red-600 p-4 text-white">
+          <div className="rounded-lg bg-red-600 p-4 text-white transition-all duration-300 hover:scale-105 hover:shadow-lg">
             <h3 className="font-bold">PERIGO</h3>
             <p className="mt-2 text-sm">
               O nível passou de 85% da soleira ou faltam 30 minutos ou menos
@@ -328,7 +350,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section id="calculos" className="scroll-mt-16 bg-white ">
+      <section id="calculos" className="scroll-mt-16 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
           <h2 className="text-2xl font-bold text-agua-700 md:text-3xl">
             A matemática por trás do aviso
@@ -341,7 +363,7 @@ const Home = () => {
           <div className="mt-8 rounded-lg border border-agua-100 bg-agua-50">
             <button
               type="button"
-              onClick={() => setCalculoAberto(!calculoAberto)}
+              onClick={alternarCalculo}
               aria-expanded={calculoAberto}
               className="flex w-full items-center justify-between gap-4 p-4 text-left md:p-6"
             >
@@ -360,9 +382,15 @@ const Home = () => {
               </span>
             </button>
 
-            {calculoAberto && (
+            <div
+              ref={caixaCalculoRef}
+              style={{ maxHeight: alturaCalculo }}
+              aria-hidden={!calculoAberto}
+              className={`overflow-hidden transition-all duration-700 ease-in-out ${
+                calculoAberto ? "opacity-100" : "opacity-0"
+              }`}
+            >
               <div className="flex flex-col gap-8 border-t border-agua-100 p-4 text-slate-700 md:p-6">
-
                 <div className="border-l-4 border-yellow-500 bg-yellow-50 p-4 text-sm">
                   <p className="font-bold text-slate-900">Resumo</p>
                   <p className="mt-2">
@@ -628,7 +656,7 @@ const Home = () => {
                   </ul>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </section>
