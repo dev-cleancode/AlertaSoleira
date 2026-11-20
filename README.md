@@ -48,25 +48,6 @@ O projeto completo tem três partes, feitas por membros diferentes da equipe:
 
 ## Requisitos
 
-### Requisitos funcionais
-
-- Apresentar o projeto (problema, solução e estados da loja).
-- Permitir registrar uma loja com nome, bairro, altura da soleira (1 a 50 cm), WhatsApp com DDD, e-mail e senha (mínimo de 6 caracteres).
-- Não permitir dois registros com o mesmo e-mail.
-- Permitir login com e-mail e senha e manter a sessão no navegador.
-- Listar as lojas com o status calculado a partir das leituras.
-- Restringir a área /loja/[id] ao comerciante dono daquele id.
-- Permitir ao comerciante editar os dados da loja, informar o status e excluir a loja.
-- Mostrar o relatório de cálculo em uma caixa que abre e fecha.
-
-### Requisitos não funcionais
-
-- Layout responsivo, pensado primeiro para telas pequenas (mobile-first).
-- Consumo de API REST com axios.
-- Senha guardada como hash SHA-256 (e-mail e senha combinados), nunca em texto puro.
-- Código em JavaScript (sem TypeScript), componentes em arrow function.
-- O sensor funciona sem internet (LED e buzzer), como pede o briefing.
-
 ### Requisitos para rodar
 
 - Node.js e npm instalados.
