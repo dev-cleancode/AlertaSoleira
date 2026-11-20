@@ -15,6 +15,11 @@ import CampoFormulario from "../../components/CampoFormulario";
 import CardLoja from "../../components/CardLoja";
 import LoginForm from "../../components/LoginForm";
 
+const proximoMinuto = (leituras) => {
+  if (leituras.length === 0) return 0;
+  return Number(leituras[leituras.length - 1].minuto) + 5;
+};
+
 const AreaLoja = () => {
   const { id } = useParams();
   const router = useRouter();
@@ -26,10 +31,16 @@ const AreaLoja = () => {
     soleira: "",
     telefone: "",
   });
+  const [leitura, setLeitura] = useState({ minuto: "", nivel: "" });
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [enviandoLeitura, setEnviandoLeitura] = useState(false);
   const [mensagemForm, setMensagemForm] = useState({ tipo: "", texto: "" });
+  const [mensagemLeitura, setMensagemLeitura] = useState({
+    tipo: "",
+    texto: "",
+  });
 
   const autorizado = pronto && !!usuario && String(usuario.id) === String(id);
 
@@ -47,6 +58,10 @@ const AreaLoja = () => {
           soleira: String(dados.soleira),
           telefone: dados.telefone || "",
         });
+        setLeitura({
+          minuto: String(proximoMinuto(dados.leituras)),
+          nivel: "",
+        });
       } catch (e) {
         setErro("Não foi possível carregar os dados da loja.");
       } finally {
@@ -58,6 +73,10 @@ const AreaLoja = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleChangeLeitura = (e) => {
+    setLeitura({ ...leitura, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -89,6 +108,59 @@ const AreaLoja = () => {
       });
     } finally {
       setEnviando(false);
+    }
+  };
+
+  const handleLeitura = async (e) => {
+    e.preventDefault();
+    const minuto = Number(leitura.minuto);
+    const nivel = Number(leitura.nivel.replace(",", "."));
+    const ultima = loja.leituras[loja.leituras.length - 1];
+
+    if (
+      leitura.minuto === "" ||
+      leitura.nivel.trim() === "" ||
+      Number.isNaN(minuto) ||
+      Number.isNaN(nivel) ||
+      minuto < 0 ||
+      nivel < 0
+    ) {
+      setMensagemLeitura({
+        tipo: "erro",
+        texto: "Informe o minuto e o nível (cm) com valores válidos.",
+      });
+      return;
+    }
+    if (ultima && minuto <= Number(ultima.minuto)) {
+      setMensagemLeitura({
+        tipo: "erro",
+        texto: `O minuto precisa ser maior que o da última leitura (${ultima.minuto}).`,
+      });
+      return;
+    }
+
+    setEnviandoLeitura(true);
+    try {
+      const resposta = await api.put(
+        `/lojas/${id}`,
+        montarDados(loja, {
+          leituras: [...loja.leituras, { minuto, nivel }],
+        })
+      );
+      const atualizada = normalizarLoja(resposta.data);
+      setLoja(atualizada);
+      setLeitura({
+        minuto: String(proximoMinuto(atualizada.leituras)),
+        nivel: "",
+      });
+      setMensagemLeitura({ tipo: "sucesso", texto: "Leitura adicionada." });
+    } catch (erroLeitura) {
+      setMensagemLeitura({
+        tipo: "erro",
+        texto: "Não foi possível adicionar a leitura.",
+      });
+    } finally {
+      setEnviandoLeitura(false);
     }
   };
 
@@ -254,9 +326,9 @@ const AreaLoja = () => {
                   {loja.leituras
                     .slice(-6)
                     .reverse()
-                    .map((leitura, i) => (
+                    .map((item, i) => (
                       <li key={i}>
-                        Minuto {leitura.minuto}: {Number(leitura.nivel).toFixed(1)} cm
+                        Minuto {item.minuto}: {Number(item.nivel).toFixed(1)} cm
                       </li>
                     ))}
                 </ul>
@@ -284,6 +356,57 @@ const AreaLoja = () => {
                 </ul>
               )}
             </div>
+          </div>
+
+          <div className="mt-8 max-w-sm rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3">
+            <p className="text-xs font-semibold uppercase text-slate-500">
+              Somente demonstração
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              Simula uma leitura do sensor para testar o cálculo do status. Na
+              versão real, as leituras vêm do sensor.
+            </p>
+            <form
+              onSubmit={handleLeitura}
+              className="mt-3 flex flex-col gap-2"
+            >
+              <div className="grid grid-cols-2 gap-2">
+                <CampoFormulario
+                  label="Minuto"
+                  id="minuto"
+                  type="number"
+                  value={leitura.minuto}
+                  onChange={handleChangeLeitura}
+                  required
+                />
+                <CampoFormulario
+                  label="Nível (cm)"
+                  id="nivel"
+                  placeholder="Ex.: 11,5"
+                  value={leitura.nivel}
+                  onChange={handleChangeLeitura}
+                  required
+                />
+              </div>
+              {mensagemLeitura.texto && (
+                <p
+                  className={`text-xs ${
+                    mensagemLeitura.tipo === "erro"
+                      ? "text-red-600"
+                      : "text-green-700"
+                  }`}
+                >
+                  {mensagemLeitura.texto}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={enviandoLeitura}
+                className="rounded-md bg-slate-200 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-300 disabled:bg-slate-100"
+              >
+                {enviandoLeitura ? "Adicionando..." : "Adicionar leitura"}
+              </button>
+            </form>
           </div>
         </>
       )}
